@@ -36,16 +36,16 @@ php_display_startup_errors: "Off"
 php_apc_enabled_in_ini: true
 apc_enabled: "1"
 apc_shm_size: "256M"
-apc_ttl: "7200" # Seconds a cache entry is allowed to idle in a slot
-apc_user_ttl: "7200" # Seconds a user cache entry is allowed to idle in a slot
-apc_gc_ttl: "3600" # Seconds that a cache entry may remain on the garbage-collection list
-apc_cache_by_default: "1" # On by default, can be set to off and used with apc.filters
-apc_filters: "" # A comma-separated list of POSIX extended regular expressions. i.e. "apc\.php$"
-apc_file_update_protection: "2" # Puts a delay on caching brand new files.
-apc_enable_cli: "0" # Enables APC for the CLI version of PHP
-apc_max_file_size: "1M" # Prevents large files from being cached
-apc_stat: "1" # Defaults to on, forcing APC to stat (check) the script on each request to determine if it has been modified. May want to use 0 for production
-apc_include_once_override: "0" # Optimize include_once and require_once calls and avoid the expensive system calls used.
+apc_ttl: "7200"
+apc_user_ttl: "7200"
+apc_gc_ttl: "3600"
+apc_cache_by_default: "1"
+apc_filters: ""
+apc_file_update_protection: "2"
+apc_enable_cli: "0"
+apc_max_file_size: "1M"
+apc_stat: "1"
+apc_include_once_override: "0"
 ```
 
 ### Opcache variables
