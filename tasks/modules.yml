@@ -1,0 +1,23 @@
+---
+
+- name: Configure php5-fpm modules
+  template:
+    src: "{{ item }}"
+    dest: "/etc/php5/mods-available/{{ item | basename }}"
+    force: yes
+    owner: root
+    group: root
+    mode: 0644
+  with_items: php5_fpm_modules_config
+  notify: restart php5-fpm
+
+- name: enable php5 modules
+  shell: php5enmod {{ item }}
+  args:
+    creates: /etc/php5/cli/conf.d/20-{{ item }}.ini
+  with_items: php5_fpm_modules
+
+#- name: Configure OpCache
+#  template: src="mods-available/opcache.ini" dest="/etc/php5/mods-available/opcache.ini" force=yes owner=root group=root mode=0644
+#  when: php_opcache_enabled_in_ini
+#  notify: restart php5-fpm

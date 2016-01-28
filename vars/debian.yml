@@ -1,0 +1,24 @@
+---
+php5_fpm_default_packages:
+  - php5-fpm
+  - php5-curl
+  - php5-gd
+  - php5-intl
+  - php-pear
+  - php5-imagick
+  - php5-imap
+  - php5-mcrypt
+  - php5-memcache
+  - php5-redis
+  - php5-pspell
+  - php5-sqlite
+  - php5-tidy
+  - php5-xmlrpc
+  - php5-xsl
+  - php5-apcu
+  - fcgiwrap
+  - php5-mysqlnd
+
+php5_fpm_modules_config:
+  - mods-available/apcu.ini
+  - mods-available/opcache.ini

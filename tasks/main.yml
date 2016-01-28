@@ -1,29 +1,22 @@
 ---
-- name: Install packages
-  apt: name={{item}} state=present
-  with_items: php5_packages
-  notify: restart php5-fpm
+- fail:
+    msg: 'This ansible role supports Debian and Ubuntu 14+ only'
+  when: (ansible_distribution not in ['Debian', 'Ubuntu']) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version|int < 14)
 
-- name: Ensure configuration directories exist.
-  file: path={{ item }} state=directory follow=true
-  with_items:
-    - "/etc/php5"
-    - "/etc/php5/conf.d"
-    - "/etc/php5/pool.d"
+- include_vars: debian.yml
+  when: ansible_distribution == 'Debian'
 
-- name: Place PHP configuration file in place.
-  template: src=php.ini dest="/etc/php5/fpm/php.ini" owner=root group=root mode=0644
-  notify: restart php5-fpm
+- include_vars: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
-- name: Configure APC
-  template: src="mods-available/apcu.ini" dest="/etc/php5/mods-available/apcu.ini" force=yes owner=root group=root mode=0644
-  when: php_apc_enabled_in_ini
-  notify: restart php5-fpm
 
-- name: Configure OpCache
-  template: src="mods-available/opcache.ini" dest="/etc/php5/mods-available/opcache.ini" force=yes owner=root group=root mode=0644
-  when: php_opcache_enabled_in_ini
-  notify: restart php5-fpm
+- include: install.yml
+- include: configure.yml
+- include: modules.yml
+- include: pools.yml
 
 - name: Ensure php-fpm is started and enabled at boot.
-  service: name=php5-fpm state=started enabled=yes
+  service:
+    name: php5-fpm
+    state: started
+    enabled: yes

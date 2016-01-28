@@ -1,64 +1,99 @@
 ---
-php5_packages:
-  - php5-fpm
-  - php5-mysql
-  - php5-curl
-  - php5-gd
-  - php5-intl
-  - php-pear
-  - php5-imagick
-  - php5-imap
-  - php5-mcrypt
-  - php5-memcache
-  - php5-redis
-  - php5-pspell
-  - php5-sqlite
-  - php5-tidy
-  - php5-xmlrpc
-  - php5-xsl
-  - php5-apcu
-  - fcgiwrap
+# Used for host variables
+php5_fpm_host_packages: []
+
+# Used for group packages
+php5_fpm_group_packages: []
+
+php5_fpm_pid: '/run/php5-fpm.pid'
+php5_fpm_error_log: '/var/log/php5-fpm.log'
+php5_fpm_log_level: 'warning'
+php5_fpm_syslog_facility: ''
+php5_fpm_syslog_ident: ''
+php5_fpm_emergency_restart_threshold: 3
+php5_fpm_emergency_restart_interval: '60s'
+php5_fpm_process_control_timeout: '5s'
+php5_fpm_process_max: ''
+php5_fpm_process_priority: ''
+php5_fpm_daemonize: ''
+php5_fpm_rlimit_files: ''
+php5_fpm_rlimit_core: ''
+php5_fpm_events_mechanism: ''
+php5_fpm_systemd_interval: 10
+
+# Include additional config files
+php5_fpm_include: ['/etc/php5/fpm/pool.d/*.conf']
+
+php5_fpm_pool_dir: '/etc/php5/fpm/pool.d/'
+php5_fpm_remove_default_pool: true
+
+php5_fpm_pools: []
+#  - name: 'r24_live'
+#    user: 'www-data'
+#    group: 'www-data'
+#    prefix: '/var/www/test/test.de/html'
+#    socket_file: '/run/r24.socket'
+#    tmp_path: '/var/www/'
+#    sessions_path: '/var/www/sessions/r24_live'
+
 
 # php.ini settings
-php_expose_php: "On"
-php_memory_limit: "256M"
-php_max_execution_time: "60"
-php_max_input_time: "60"
-php_max_input_vars: "1000"
-php_realpath_cache_size: "32K"
-php_realpath_cache_ttl: "120"
-php_upload_max_filesize: "64M"
-php_post_max_size: "32M"
-php_date_timezone: "Europe/Berlin"
-php_sendmail_path: "/usr/sbin/sendmail -t -i"
-php_short_open_tag: false
-php_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
-php_display_errors: "Off"
-php_display_startup_errors: "Off"
+php5_ini:
+  expose_php: On
+  memory_limit: 64M
+  max_execution_time: 30
+  max_input_time: 60
+  max_input_vars: 100
+  realpath_cache_size: 32K
+  realpath_cache_ttl: 120
+  upload_max_filesize: 64M
+  post_max_size: 32M
+  date_timezone: "Europe/Berlin"
+  sendmail_path: "/usr/sbin/sendmail -t -i"
+  error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+  display_errors: "Off"
+  display_startup_errors: "Off"
 
 # APCu
-php_apc_enabled_in_ini: true
-apc_enabled: "1"
-apc_shm_size: "256M"
-apc_ttl: "7200" # Seconds a cache entry is allowed to idle in a slot
-apc_user_ttl: "7200" # Seconds a user cache entry is allowed to idle in a slot
-apc_gc_ttl: "3600" # Seconds that a cache entry may remain on the garbage-collection list
-apc_cache_by_default: "1" # On by default, can be set to off and used with apc.filters
-apc_filters: "" # A comma-separated list of POSIX extended regular expressions. i.e. "apc\.php$"
-apc_file_update_protection: "2" # Puts a delay on caching brand new files.
-apc_enable_cli: "0" # Enables APC for the CLI version of PHP
-apc_max_file_size: "1M" # Prevents large files from being cached
-apc_stat: "1" # Defaults to on, forcing APC to stat (check) the script on each request to determine if it has been modified. May want to use 0 for production
-apc_include_once_override: "0" # Optimize include_once and require_once calls and avoid the expensive system calls used.
+php5_apcu_ini:
+  enabled: 1
+  shm_segments: 1
+  shm_size: 256M
+  num_files_hint: 10000
+  user_entries_hint: 10000
+  max_file_size: 1M
+  optimization: 0
+  ttl: 0
+  user_ttl: 0
+  gc_ttl: 600
+  cache_by_default: 1
+  filters: ""
+  slam_defense: 0
+  use_request_time: 1
+  mmap_file_mask: /tmp/apc-dummy.XXXXXX
+  file_update_protection: 2
+  enable_cli: 0
+  stat: 1
+  write_lock: 1
+  report_autofilter: 0
+  include_once_override: 0
+  rfc1867: 1
+  rfc1867_prefix: "upload_"
+  rfc1867_name: "APC_UPLOAD_PROGRESS"
+  rfc1867_freq: 0
+  localcache: 1
+  localcache.size: 512
+  coredump_unmap: 0
+  stat_ctime: 0
 
 # OpCache
-php_opcache_enabled_in_ini: true
-php_opcache_enable: "1"
-php_opcache_enable_cli: "0"
-php_opcache_memory_consumption: "96"
-php_opcache_interned_strings_buffer: "16"
-php_opcache_max_accelerated_files: "4096"
-php_opcache_max_wasted_percentage: "5"
-php_opcache_validate_timestamps: "1"
-php_opcache_revalidate_freq: "2"
-php_opcache_max_file_size: "0"
+php5_opcache_ini:
+  enable: "1"
+  enable_cli: "0"
+  memory_consumption: "96"
+  interned_strings_buffer: "16"
+  max_accelerated_files: "4096"
+  max_wasted_percentage: "5"
+  validate_timestamps: "1"
+  revalidate_freq: "2"
+  max_file_size: "0"

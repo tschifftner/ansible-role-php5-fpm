@@ -1,0 +1,74 @@
+---
+- name: Collect all existing users
+  shell: 'cut -d: -f1 /etc/passwd'
+  register: system_users
+  changed_when: false
+
+- name: Ensure php5-fpm pool path exists
+  file:
+    path: '{{ php5_fpm_pool_dir }}'
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Ensure default pool is removed
+  notify: reload php5-fpm
+  file:
+    path: '{{ php5_fpm_pool_dir }}/www.conf'
+    state: absent
+  when: php5_fpm_remove_default_pool
+
+- name: 'Get all pools'
+  shell: ls -1 {{ php5_fpm_pool_dir }} | grep -v '^system.*'
+  register: existing_pools
+  changed_when: false
+  ignore_errors: true
+
+- set_fact:
+    all_php5_fpm_pools: "{{ (php5_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
+
+- name: Remove pools not in all_php5_fpm_pools
+  file:
+    path: '{{ php5_fpm_pool_dir }}/{{ item }}'
+    state: absent
+  when: "{{ ( item | replace('.conf', '')) not in (php5_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
+  with_items: existing_pools.stdout_lines
+
+- name: Ensure groups exists
+  group:
+    name: '{{ item.group }}'
+    state: present
+  when: item.group is defined
+  with_items: php5_fpm_pools
+
+- name: Ensure users exists
+  user:
+    name: '{{ item.user }}'
+    state: present
+  when: item.user is defined
+  with_items: php5_fpm_pools
+
+- name: Ensure registered paths exist and belong to php5-fpm
+  file:
+    path: '{{ item[0][item.1] }}'
+    state: directory
+    owner: '{{ item.0.user }}'
+    group: '{{ item.0.group | default(item.0.user) }}'
+    mode: '2751'
+    follow: yes
+  when: php5_fpm_pools|length and item[0][item.1] is defined and item.0.user in system_users.stdout_lines
+  with_nested:
+    - php5_fpm_pools
+    - ['prefix', 'chroot', 'tmp_path', 'sessions_path']
+
+- name: Configure pools
+  notify: reload php5-fpm
+  template:
+    src: 'pool.conf'
+    dest: '{{ php5_fpm_pool_dir }}/{{ item.name }}.conf'
+    owner: root
+    group: www-data
+    mode: '0644'
+  with_items: php5_fpm_pools
+  when: php5_fpm_pools|length

@@ -1,0 +1,10 @@
+---
+php5_fpm_config_dirs:
+  - "/etc/php5"
+  - "/etc/php5/conf.d"
+  - "/etc/php5/pool.d"
+
+php5_fpm_modules:
+  - mcrypt
+
+php5_fpm_modules_config: []

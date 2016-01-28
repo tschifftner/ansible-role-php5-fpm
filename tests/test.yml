@@ -2,5 +2,23 @@
 - hosts: localhost
   remote_user: root
 
+  vars:
+    php5_fpm_pools:
+      - name: 'travis'
+        user: 'www-data'
+        group: 'www-data'
+        prefix: '/var/www/html'
+        socket_file: '/run/travis.socket'
+
   roles:
     - ansible-role-php5-fpm
+
+  tasks:
+    - name: Create index.php
+      copy:
+        content: '<?php phpinfo();'
+        dest: '{{ php5_fpm_pools.prefix }}/index.php'
+        owner: '{{ project_user }}'
+        group: '{{ client_group }}'
+        mode: '0644'
+        state: present

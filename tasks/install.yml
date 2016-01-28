@@ -1,0 +1,13 @@
+---
+
+- set_fact:
+    php5_fpm_packages: '{{ php5_fpm_default_packages + php5_fpm_group_packages + php5_fpm_host_packages }}'
+
+- name: Install php5 packages
+  notify: restart php5-fpm
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: php5_fpm_packages
+  when: php5_fpm_packages|length
+
