@@ -49,3 +49,12 @@ script:
     test -e /run/travis.socket
     && (echo 'PHP socket exists' && exit 0)
     || (echo 'PHP socket does not exist' && exit 1)
+
+after_failure:
+  - sudo service php5-fpm status
+  - 'ls -l /etc/php5/fpm/pool.d/'
+  - 'ls -l /run/'
+  - ansible --version
+
+notifications:
+  slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
