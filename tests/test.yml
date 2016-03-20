@@ -1,6 +1,6 @@
 ---
 - hosts: localhost
-  remote_user: root
+  become: true
 
   vars:
     php5_fpm_pools:
@@ -8,6 +8,8 @@
         user: 'www-data'
         group: 'www-data'
         prefix: '/var/www/html'
+        logs_path: '/var/log/travis/'
+        project_paths: []
         socket_file: '/run/travis.socket'
 
   roles:

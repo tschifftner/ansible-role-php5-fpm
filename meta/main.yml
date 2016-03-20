@@ -6,7 +6,7 @@ galaxy_info:
   description: Installs and configures php5-fpm on Debian/Ubuntu linux servers.
   company: ambimax® GmbH
   license: MIT
-  min_ansible_version: 1.8
+  min_ansible_version: 2.0
   platforms:
   - name: Debian
     versions:
@@ -18,5 +18,4 @@ galaxy_info:
   galaxy_tags:
     - ubuntu
     - debian
-    - ntp
-    - timezone
+    - php5-fpm
