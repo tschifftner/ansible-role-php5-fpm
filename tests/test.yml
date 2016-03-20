@@ -19,8 +19,8 @@
     - name: Create index.php
       copy:
         content: '<?php phpinfo();'
-        dest: '{{ php5_fpm_pools.prefix }}/index.php'
-        owner: '{{ project_user }}'
-        group: '{{ client_group }}'
+        dest: '{{ php5_fpm_pools.0.prefix }}/index.php'
+        owner: 'www-data'
+        group: 'www-data'
         mode: '0644'
         state: present
