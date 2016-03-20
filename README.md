@@ -1,4 +1,4 @@
-# Ansible Role: Nginx
+# Ansible Role: php5-fpm
 
 [![Build Status](https://travis-ci.org/tschifftner/ansible-role-php5-fpm.svg)](https://travis-ci.org/tschifftner/ansible-role-php5-fpm)
 
@@ -70,7 +70,7 @@ None.
 
     - hosts: server
       roles:
-        - { role: tschifftner.ansible-role-php5-fpm }
+        - { role: tschifftner.php5-fpm }
 
 ## License
 

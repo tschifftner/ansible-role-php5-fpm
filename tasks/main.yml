@@ -11,9 +11,16 @@
 
 
 - include: install.yml
+  tags: ['php5-fpm-install']
+
 - include: configure.yml
+  tags: ['php5-fpm-configure']
+
 - include: modules.yml
+  tags: ['php5-fpm-modules']
+
 - include: pools.yml
+  tags: ['php5-fpm-pools']
 
 - name: Ensure php-fpm is started and enabled at boot.
   service:

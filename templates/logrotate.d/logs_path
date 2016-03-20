@@ -1,0 +1,12 @@
+{{ item[0][item.1] }}/*.log {
+	daily
+	rotate 7
+	compress
+	dateext
+	maxage 60
+	missingok
+	nocreate
+	notifempty
+	size 5M
+	su root root
+}

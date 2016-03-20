@@ -50,17 +50,69 @@
   with_items: php5_fpm_pools
 
 - name: Ensure registered paths exist and belong to php5-fpm
+  notify: reload php5-fpm
   file:
     path: '{{ item[0][item.1] }}'
     state: directory
     owner: '{{ item.0.user }}'
     group: '{{ item.0.group | default(item.0.user) }}'
-    mode: '2751'
+    mode: '2771'
     follow: yes
-  when: php5_fpm_pools|length and item[0][item.1] is defined and item.0.user in system_users.stdout_lines
+  when: php5_fpm_pools|length and item[0][item.1] is defined
+   #and item[0][item.1] is defined and item.0.user in system_users.stdout_lines
   with_nested:
     - php5_fpm_pools
-    - ['prefix', 'chroot', 'tmp_path', 'sessions_path']
+    - ['prefix', 'chroot', 'logs_path', 'tmp_path', 'sessions_path', 'releases_path', 'shared_path']
+
+- name: Ensure project paths exist and belong to php5-fpm
+  notify: reload php5-fpm
+  file:
+    path: '{{ item.1 }}'
+    state: directory
+    owner: '{{ item.0.user }}'
+    group: '{{ item.0.group | default(item.0.user) }}'
+    mode: '2771'
+    follow: yes
+  when: item.1 is defined and item.1 != ''
+  with_subelements:
+    - php5_fpm_pools
+    - project_paths
+
+- name: Add logrotate to some directories
+  template:
+    src: 'logrotate.d/{{ item.1 }}'
+    dest: "/etc/logrotate.d/{{ item.1 }}_{{ item.0.name }}"
+  when: php5_fpm_pools|length and item[0][item.1] is defined
+  with_nested:
+    - php5_fpm_pools
+    - ['logs_path']
+
+- name: Add pool cronjobs (currently for sessions only)
+  cron:
+    user: "{{ item.user }}"
+    name: "PHP Pool Cronjob for {{ item.name | default(item.user if item.user is defined else 'www-data') }}"
+    minute: "*/5"
+    job: '/usr/bin/find {{ item.sessions_path }} -mindepth 1 -maxdepth 1 -type f -cmin +24 -print0 -exec rm {} \; >/dev/null 2>&1'
+    state: "{{ item.state | default('present') }}"
+    cron_file: "{{ item.name | default(item.user if item.user is defined else 'www-data') }}"
+  when: php5_fpm_cronjobs is defined and php5_fpm_cronjobs|length and item.sessions_path is defined
+  with_items: php5_fpm_pools
+
+- name: Register cronjobs
+  cron:
+    user: "{{ item.user }}"
+    name: "{{ item.name }}"
+    day: "{{ item.day | default('*') }}"
+    hour: "{{ item.hour | default('*') }}"
+    minute: "{{ item.minute | default('*') }}"
+    month: "{{ item.month | default('*') }}"
+    weekday: "{{ item.weekday | default('*') }}"
+    job: '{{ item.job }}'
+    state: "{{ item.state | default('present') }}"
+    cron_file: "{{ item.cron_file }}"
+    special_time: "{{ item.special_time | default(omit) }}"
+  when: php5_fpm_cronjobs is defined and php5_fpm_cronjobs|length
+  with_items: php5_fpm_cronjobs
 
 - name: Configure pools
   notify: reload php5-fpm
