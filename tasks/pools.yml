@@ -33,21 +33,21 @@
     path: '{{ php5_fpm_pool_dir }}/{{ item }}'
     state: absent
   when: "{{ ( item | replace('.conf', '')) not in (php5_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
-  with_items: existing_pools.stdout_lines
+  with_items: '{{existing_pools.stdout_lines}}'
 
 - name: Ensure groups exists
   group:
     name: '{{ item.group }}'
     state: present
   when: item.group is defined
-  with_items: php5_fpm_pools
+  with_items: '{{php5_fpm_pools}}'
 
 - name: Ensure users exists
   user:
     name: '{{ item.user }}'
     state: present
   when: item.user is defined
-  with_items: php5_fpm_pools
+  with_items: '{{php5_fpm_pools}}'
 
 - name: Ensure registered paths exist and belong to php5-fpm
   notify: reload php5-fpm
@@ -61,7 +61,7 @@
   when: php5_fpm_pools|length and item[0][item.1] is defined
    #and item[0][item.1] is defined and item.0.user in system_users.stdout_lines
   with_nested:
-    - php5_fpm_pools
+    - '{{php5_fpm_pools}}'
     - ['prefix', 'chroot', 'logs_path', 'tmp_path', 'sessions_path', 'releases_path', 'shared_path']
 
 - name: Ensure project paths exist and belong to php5-fpm
@@ -75,7 +75,7 @@
     follow: yes
   when: item.1 is defined and item.1 != ''
   with_subelements:
-    - php5_fpm_pools
+    - '{{php5_fpm_pools}}'
     - project_paths
 
 - name: Add logrotate to some directories
@@ -84,7 +84,7 @@
     dest: "/etc/logrotate.d/{{ item.1 }}_{{ item.0.name }}"
   when: php5_fpm_pools|length and item[0][item.1] is defined
   with_nested:
-    - php5_fpm_pools
+    - '{{php5_fpm_pools}}'
     - ['logs_path']
 
 - name: Add pool cronjobs (currently for sessions only)
@@ -96,7 +96,7 @@
     state: "{{ item.state | default('present') }}"
     cron_file: "{{ item.name | default(item.user if item.user is defined else 'www-data') }}"
   when: php5_fpm_cronjobs is defined and php5_fpm_cronjobs|length and item.sessions_path is defined
-  with_items: php5_fpm_pools
+  with_items: '{{php5_fpm_pools}}'
 
 - name: Register cronjobs
   cron:
@@ -112,7 +112,7 @@
     cron_file: "{{ item.cron_file }}"
     special_time: "{{ item.special_time | default(omit) }}"
   when: php5_fpm_cronjobs is defined and php5_fpm_cronjobs|length
-  with_items: php5_fpm_cronjobs
+  with_items: '{{php5_fpm_cronjobs}}'
 
 - name: Configure pools
   notify: reload php5-fpm
@@ -122,5 +122,5 @@
     owner: root
     group: www-data
     mode: '0644'
-  with_items: php5_fpm_pools
+  with_items: '{{php5_fpm_pools}}'
   when: php5_fpm_pools|length

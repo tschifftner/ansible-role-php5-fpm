@@ -8,6 +8,6 @@
   apt:
     name: "{{ item }}"
     state: present
-  with_items: php5_fpm_packages
+  with_items: '{{php5_fpm_packages}}'
   when: php5_fpm_packages|length
 

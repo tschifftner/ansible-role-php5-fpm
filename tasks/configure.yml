@@ -4,7 +4,7 @@
     path: "{{ item }}"
     state: directory
     follow: true
-  with_items: php5_fpm_config_dirs
+  with_items: '{{php5_fpm_config_dirs}}'
 
 - name: Set php.ini
   template:
