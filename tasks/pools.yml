@@ -111,7 +111,7 @@
     state: "{{ item.state | default('present') }}"
     cron_file: "{{ item.cron_file }}"
     special_time: "{{ item.special_time | default(omit) }}"
-  when: php5_fpm_cronjobs is defined and php5_fpm_cronjobs|length
+  when: php5_fpm_cronjobs|length
   with_items: '{{php5_fpm_cronjobs}}'
 
 - name: Configure pools

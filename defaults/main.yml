@@ -36,6 +36,7 @@ php5_fpm_pools: []
 #    tmp_path: '/var/www/'
 #    sessions_path: '/var/www/sessions/r24_live'
 
+php5_fpm_cronjobs: []
 
 # php.ini settings
 php5_ini:
