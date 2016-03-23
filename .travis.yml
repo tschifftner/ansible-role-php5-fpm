@@ -1,11 +1,36 @@
 ---
-language: python
-python: "2.7"
 sudo: required
 dist: trusty
 
+language: python
+python: "2.7"
+
 env:
-  - SITE=test.yml
+  - SITE=test.yml ANSIBLE_VERSION=latest
+  - SITE=test.yml ANSIBLE_VERSION=2.0.1.0
+  - SITE=test.yml ANSIBLE_VERSION=2.0.0.2
+  - SITE=test.yml ANSIBLE_VERSION=2.0.0.1
+  - SITE=test.yml ANSIBLE_VERSION=2.0.0.0
+  - SITE=test.yml ANSIBLE_VERSION=1.9.4
+  - SITE=test.yml ANSIBLE_VERSION=1.9.3
+  - SITE=test.yml ANSIBLE_VERSION=1.9.2
+  - SITE=test.yml ANSIBLE_VERSION=1.9.1
+  - SITE=test.yml ANSIBLE_VERSION=1.9.0.1
+  - SITE=test.yml ANSIBLE_VERSION=1.8.4
+  - SITE=test.yml ANSIBLE_VERSION=1.8.3
+  - SITE=test.yml ANSIBLE_VERSION=1.8.2
+  - SITE=test.yml ANSIBLE_VERSION=1.8.1
+  - SITE=test.yml ANSIBLE_VERSION=1.8
+
+matrix:
+  allow_failures:
+    - env: SITE=test.yml ANSIBLE_VERSION=2.0.0.2
+    - env: SITE=test.yml ANSIBLE_VERSION=2.0.0.1
+    - env: SITE=test.yml ANSIBLE_VERSION=2.0.0.0
+
+branches:
+  only:
+    - master
 
 before_install:
   - sudo apt-get update -qq
@@ -13,7 +38,7 @@ before_install:
 
 install:
   # Install Ansible.
-  - pip install ansible
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install --no-binary ansible ansible; else pip install --no-binary ansible ansible==$ANSIBLE_VERSION; fi
 
   # Add ansible.cfg to pick up roles path.
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
@@ -52,6 +77,8 @@ script:
     || (echo 'PHP socket does not exist' && exit 1)
 
 after_failure:
+  # run playbook again to see idempotence failures
+  - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
   - sudo service php5-fpm status
   - 'ls -l /etc/php5/fpm/pool.d/'
   - 'ls -l /run/'
@@ -59,3 +86,4 @@ after_failure:
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
