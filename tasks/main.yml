@@ -25,5 +25,5 @@
 - name: Start php5-fpm
   service:
     name: 'php5-fpm'
-    state: started
+#    state: started
     enabled: yes
