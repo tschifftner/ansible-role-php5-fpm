@@ -48,11 +48,10 @@ install:
 
 script:
   # Check the role/playbook's syntax.
-  - "ansible-playbook -i tests/inventory tests/$SITE --syntax-check"
+  - ansible-playbook -i tests/inventory tests/$SITE --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - "ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo"
-  - "ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo"
+  - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   - >
@@ -79,9 +78,10 @@ script:
 after_failure:
   # run playbook again to see idempotence failures
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
-  - sudo service php5-fpm status
+  - service php5-fpm status
   - 'ls -l /etc/php5/fpm/pool.d/'
   - 'ls -l /run/'
+  - tail -n150 /var/log/syslog
   - ansible --version
 
 notifications:

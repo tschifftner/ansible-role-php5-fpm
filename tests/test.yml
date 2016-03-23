@@ -1,6 +1,6 @@
 ---
 - hosts: localhost
-  become: true
+  remote_user: root
 
   vars:
     php5_fpm_pools:

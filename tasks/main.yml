@@ -22,7 +22,7 @@
 - include: pools.yml
   tags: ['php5-fpm-pools']
 
-- name: Ensure php-fpm is started and enabled at boot
+- name: Start php5-fpm
   service:
     name: 'php5-fpm'
     state: started
