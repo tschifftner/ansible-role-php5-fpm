@@ -1,6 +1,6 @@
 # Ansible Role: php5-fpm
 
-[![Build Status](https://travis-ci.org/tschifftner/ansible-role-php5-fpm.svg)](https://travis-ci.org/tschifftner/ansible-role-php5-fpm)
+[![Build Status](https://travis-ci.org/tschifftner/ansible-role-php5-fpm.svg?branch=master)](https://travis-ci.org/tschifftner/ansible-role-php5-fpm)
 
 Installs php5-fpm on Debian/Ubuntu linux servers.
 
@@ -12,6 +12,69 @@ None.
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
+### Create vhosts
+
+```
+php5_fpm_pools:
+  - name: 'live'
+    user: 'live'
+    prefix: '/var/www/live/current'
+    tmp_path: '/var/www/live/tmp'
+    sessions_path: '/var/www/live/sessions'
+    releases_path: '/var/www/live/releases'
+    shared_path: '/var/www/live/shared'
+    logs_path: '/var/www/live/logs'
+    project_paths:
+      - '/var/www/live/shared/media'
+      - '/var/www/live/shared/var'
+    php_admin_value:
+      error_log: 'logs/php_errors.log'
+      max_input_vars: 5000
+      max_execution_time: 300
+      memory_limit: '256M'
+
+  - name: 'staging'
+    user: 'staging'
+    pm: ondemand
+    pm_max_children: 2
+    prefix: '/var/www/staging/current'
+    tmp_path: '/var/www/staging/tmp'
+    sessions_path: '/var/www/staging/sessions'
+    releases_path: '/var/www/staging/releases'
+    shared_path: '/var/www/staging/shared'
+    logs_path: '/var/www/staging/logs'
+    project_paths:
+      - '/var/www/staging/shared/media'
+      - '/var/www/staging/shared/var'
+    php_admin_value:
+      error_log: 'logs/php_errors.log'
+      max_input_vars: 5000
+      max_execution_time: 300
+      memory_limit: '256M'
+```
+
+### Remove vhosts
+
+To remove vhosts _remove them entirely_ or set ```state: absent``` 
+```
+php5_fpm_pools:
+  - name: 'live'
+    ...
+    state: absent
+```
+     
+### Custom folders
+
+Custom folders are created when defined in ```project_paths``` 
+```
+php5_fpm_pools:
+  - name: 'live'
+    ...
+    project_paths:
+      - '/var/www/live/shared/media'
+      - '/var/www/live/shared/var'
+```
+      
 ### php.ini variables
 ```
 php_expose_php: "On"
