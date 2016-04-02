@@ -20,7 +20,7 @@
   when: php5_fpm_remove_default_pool
 
 - name: 'Get all pools'
-  shell: ls -1 {{ php5_fpm_pool_dir }} | grep -v '^system.*'
+  shell: ls -1 {{ php5_fpm_pool_dir }} | grep 'vhost.*'
   register: existing_pools
   changed_when: false
   ignore_errors: true
@@ -28,12 +28,19 @@
 - set_fact:
     all_php5_fpm_pools: "{{ (php5_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
 
-- name: Remove pools not in all_php5_fpm_pools
+- name: Remove vhost.* pools not in all_php5_fpm_pools
   file:
     path: '{{ php5_fpm_pool_dir }}/{{ item }}'
     state: absent
-  when: "{{ ( item | replace('.conf', '')) not in (php5_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
+  when: "{{ ( item | replace('vhost.', '') | replace('.conf', '')) not in all_php5_fpm_pools }}"
   with_items: '{{existing_pools.stdout_lines}}'
+
+- name: Remove declared pools
+  file:
+    path: '{{ php5_fpm_pool_dir }}/{{ item }}'
+    state: absent
+  when: item.state is defined and item.state == absent
+  with_items: '{{ php5_fpm_pools }}'
 
 - name: Ensure groups exists
   group:
@@ -118,7 +125,7 @@
   notify: reload php5-fpm
   template:
     src: 'pool.conf'
-    dest: '{{ php5_fpm_pool_dir }}/{{ item.name }}.conf'
+    dest: '{{ php5_fpm_pool_dir }}/vhost.{{ item.name }}.conf'
     owner: root
     group: www-data
     mode: '0644'
