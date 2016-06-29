@@ -1,6 +1,6 @@
 ---
 - name: Collect all existing users
-  shell: 'cut -d: -f1 /etc/passwd'
+  command: cut -d: -f1 /etc/passwd
   register: system_users
   changed_when: false
 
@@ -10,7 +10,7 @@
     state: directory
     owner: root
     group: root
-    mode: '755'
+    mode: '0755'
 
 - name: Ensure default pool is removed
   notify: reload php5-fpm
@@ -25,7 +25,8 @@
   changed_when: false
   ignore_errors: true
 
-- set_fact:
+- name: Set fact all_php5_fpm_pools
+  set_fact:
     all_php5_fpm_pools: "{{ (php5_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
 
 - name: Remove vhost.* pools not in all_php5_fpm_pools

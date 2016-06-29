@@ -1,14 +1,16 @@
 ---
-- fail:
+- name: Fails when os is not Debian or Ubuntu 14+
+  fail:
     msg: 'This ansible role supports Debian and Ubuntu 14+ only'
   when: (ansible_distribution not in ['Debian', 'Ubuntu']) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version|int < 14)
 
-- include_vars: debian.yml
+- name: Include debian variables
+  include_vars: debian.yml
   when: ansible_distribution == 'Debian'
 
-- include_vars: ubuntu.yml
+- name: Include ubuntu variables
+  include_vars: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
-
 
 - include: install.yml
   tags: ['php5-fpm-install']

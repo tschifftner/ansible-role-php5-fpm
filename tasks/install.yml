@@ -1,6 +1,7 @@
 ---
 
-- set_fact:
+- name: Set fact for php5_fpm_packages
+  set_fact:
     php5_fpm_packages: '{{ php5_fpm_default_packages + php5_fpm_group_packages + php5_fpm_host_packages }}'
 
 - name: Install php5 packages

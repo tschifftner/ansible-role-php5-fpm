@@ -12,7 +12,7 @@
   notify: restart php5-fpm
 
 - name: enable php5 modules
-  shell: php5enmod {{ item }}
+  command: php5enmod {{ item }}
   args:
     creates: /etc/php5/cli/conf.d/20-{{ item }}.ini
   with_items: '{{php5_fpm_modules}}'
