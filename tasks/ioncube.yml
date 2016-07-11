@@ -1,0 +1,14 @@
+---
+- name: Check if ioncube is installed
+  register: _ioncube_files_exist
+  stat:
+    path: '/usr/lib/php5/ioncube/ioncube_loader_lin_5.6.so'
+  changed_when: false
+  ignore_errors: true
+
+- name: Unarchive ioncube archive
+  unarchive:
+    src: '{{ php5_fpm_ioncube_download_url }}'
+    dest: /usr/lib/php5
+    copy: no
+  when: not _ioncube_files_exist

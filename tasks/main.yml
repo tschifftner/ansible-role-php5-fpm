@@ -15,6 +15,10 @@
 - include: install.yml
   tags: ['php5-fpm-install']
 
+- include: ioncube.yml
+  when: php5_fpm_install_ioncube == true
+  tags: ['php5-fpm-ioncube']
+
 - include: configure.yml
   tags: ['php5-fpm-configure']
 

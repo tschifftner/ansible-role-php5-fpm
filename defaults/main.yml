@@ -98,3 +98,6 @@ php5_opcache_ini:
   validate_timestamps: "1"
   revalidate_freq: "2"
   max_file_size: "0"
+
+php5_fpm_install_ioncube: false
+php5_fpm_ioncube_download_url: 'http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64_5.1.2.tar.gz'
