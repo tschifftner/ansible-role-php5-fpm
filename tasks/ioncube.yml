@@ -12,3 +12,11 @@
     dest: /usr/lib/php5
     copy: no
   when: not _ioncube_files_exist
+
+- name: Recheck if ioncube is installed
+  register: _ioncube_files_exist
+  stat:
+    path: '/usr/lib/php5/ioncube/ioncube_loader_lin_{{ php_current_version }}.so'
+  changed_when: false
+  ignore_errors: true
+  when: not _ioncube_files_exist
