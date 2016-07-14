@@ -8,17 +8,6 @@ python: "2.7"
 env:
   - SITE=test.yml ANSIBLE_VERSION=latest
   - SITE=test.yml ANSIBLE_VERSION=2.1.0.0
-  - SITE=test.yml ANSIBLE_VERSION=2.0.2.0
-  - SITE=test.yml ANSIBLE_VERSION=2.0.1.0
-  - SITE=test.yml ANSIBLE_VERSION=2.0.0.2
-  - SITE=test.yml ANSIBLE_VERSION=2.0.0.1
-  - SITE=test.yml ANSIBLE_VERSION=2.0.0.0
-
-matrix:
-  allow_failures:
-    - env: SITE=test.yml ANSIBLE_VERSION=2.0.0.2
-    - env: SITE=test.yml ANSIBLE_VERSION=2.0.0.1
-    - env: SITE=test.yml ANSIBLE_VERSION=2.0.0.0
 
 branches:
   only:
@@ -43,6 +32,7 @@ script:
   - ansible-playbook -i tests/inventory tests/$SITE --syntax-check
 
   # Run the role/playbook with ansible-playbook.
+  - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
 
   # Run the role/playbook again, checking to make sure it's idempotent.
@@ -79,6 +69,7 @@ after_failure:
   - sudo tail -n150 /var/log/syslog
   - ansible --version
   - ansible-lint --version
+  - sudo ls -l /usr/lib/php5/ioncube/
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
