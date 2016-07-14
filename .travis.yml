@@ -69,6 +69,7 @@ after_failure:
   - ansible --version
   - ansible-lint --version
   - sudo ls -l /usr/lib/php5/ioncube/
+  - php /var/www/html/index.php
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6

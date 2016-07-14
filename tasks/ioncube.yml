@@ -1,5 +1,5 @@
 ---
-- name: Check if ioncube is installed
+- name: Check if ioncube is present
   register: _ioncube_files_exist
   stat:
     path: '/usr/lib/php5/ioncube/ioncube_loader_lin_{{ php_current_version }}.so'
@@ -11,12 +11,12 @@
     src: '{{ php5_fpm_ioncube_download_url }}'
     dest: /usr/lib/php5
     copy: no
-  when: not _ioncube_files_exist
+  when: _ioncube_files_exist.stat.exists is not defined or _ioncube_files_exist.stat.exists == false
 
-- name: Recheck if ioncube is installed
+- name: Recheck if ioncube is present
   register: _ioncube_files_exist
   stat:
     path: '/usr/lib/php5/ioncube/ioncube_loader_lin_{{ php_current_version }}.so'
   changed_when: false
   ignore_errors: true
-  when: not _ioncube_files_exist
+  when: _ioncube_files_exist.stat.exists is not defined or _ioncube_files_exist.stat.exists == false
