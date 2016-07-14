@@ -4,6 +4,17 @@
     msg: 'This ansible role supports Debian and Ubuntu 14+ only'
   when: (ansible_distribution not in ['Debian', 'Ubuntu']) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version|int < 14)
 
+- name: Include debian variables
+  include_vars: debian.yml
+  when: ansible_distribution == 'Debian'
+
+- name: Include ubuntu variables
+  include_vars: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- include: install.yml
+  tags: ['php5-fpm-install']
+
 - name: Get php version
   shell: php --version | head -n 1 | cut -d ' ' -f2 | cut -c1-3
   register: _php5_fpm_version_output
@@ -15,17 +26,6 @@
   set_fact:
     php_current_version: "{{ _php5_fpm_version_output.stdout }}"
   when: _php5_fpm_version_output.stdout is defined
-
-- name: Include debian variables
-  include_vars: debian.yml
-  when: ansible_distribution == 'Debian'
-
-- name: Include ubuntu variables
-  include_vars: ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
-
-- include: install.yml
-  tags: ['php5-fpm-install']
 
 - include: ioncube.yml
   when: php5_fpm_install_ioncube == true

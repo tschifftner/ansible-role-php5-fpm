@@ -33,11 +33,11 @@ script:
 
   # Run the role/playbook with ansible-playbook.
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --become
-  - cat /etc/php5/cli/php.ini
-  - cat /etc/php5/fpm/php.ini
+  - cat /etc/php5/cli/php.ini | head -n 20
+  - cat /etc/php5/fpm/php.ini | head -n 20
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --become
-  - cat /etc/php5/cli/php.ini
-  - cat /etc/php5/fpm/php.ini
+  - cat /etc/php5/cli/php.ini | head -n 20
+  - cat /etc/php5/fpm/php.ini | head -n 20
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   - >
