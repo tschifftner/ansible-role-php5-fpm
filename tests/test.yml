@@ -11,6 +11,7 @@
         logs_path: '/var/log/travis/'
         project_paths: []
         socket_file: '/run/travis.socket'
+    php5_fpm_install_ioncube: true
 
   roles:
     - ansible-role-php5-fpm

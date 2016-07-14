@@ -67,10 +67,13 @@ script:
     && (echo 'PHP socket exists' && exit 0)
     || (echo 'PHP socket does not exist' && exit 1)
 
+  - php -v | grep ioncube
+
 after_failure:
   # run playbook again to see idempotence failures
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo -vvv
   - service php5-fpm status
+  - sudo php -v
   - 'ls -l /etc/php5/fpm/pool.d/'
   - 'ls -l /run/'
   - sudo tail -n150 /var/log/syslog

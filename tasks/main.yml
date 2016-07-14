@@ -4,6 +4,18 @@
     msg: 'This ansible role supports Debian and Ubuntu 14+ only'
   when: (ansible_distribution not in ['Debian', 'Ubuntu']) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version|int < 14)
 
+- name: Get php version
+  shell: php --version | head -n 1 | cut -d ' ' -f2 | cut -c1-3
+  register: _php5_fpm_version_output
+  ignore_errors: true
+  changed_when: false
+  tags: ['skip_ansible_lint']
+
+- name: Set php version fact
+  set_fact:
+    php_current_version: "{{ _php5_fpm_version_output.stdout }}"
+  when: _php5_fpm_version_output.stdout is defined
+
 - name: Include debian variables
   include_vars: debian.yml
   when: ansible_distribution == 'Debian'
