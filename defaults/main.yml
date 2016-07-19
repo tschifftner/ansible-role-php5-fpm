@@ -38,22 +38,37 @@ php5_fpm_pools: []
 
 php5_fpm_cronjobs: []
 
-# php.ini settings
-php5_ini:
-  expose_php: On
-  memory_limit: 64M
-  max_execution_time: 30
-  max_input_time: 60
-  max_input_vars: 100
-  realpath_cache_size: 32K
-  realpath_cache_ttl: 120
-  upload_max_filesize: 64M
-  post_max_size: 32M
-  date_timezone: "Europe/Berlin"
-  sendmail_path: "/usr/sbin/sendmail -t -i"
-  error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
-  display_errors: "Off"
-  display_startup_errors: "Off"
+# php.ini (cli) settings
+php5_cli_ini_expose_php: On
+php5_cli_ini_memory_limit: 64M
+php5_cli_ini_max_execution_time: 30
+php5_cli_ini_max_input_time: 60
+php5_cli_ini_max_input_vars: 100
+php5_cli_ini_realpath_cache_size: 32K
+php5_cli_ini_realpath_cache_ttl: 120
+php5_cli_ini_upload_max_filesize: 64M
+php5_cli_ini_post_max_size: 32M
+php5_cli_ini_date_timezone: "Europe/Berlin"
+php5_cli_ini_sendmail_path: "/usr/sbin/sendmail -t -i"
+php5_cli_ini_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+php5_cli_ini_display_errors: "Off"
+php5_cli_ini_display_startup_errors: "Off"
+
+# php.ini (fpm) settings
+php5_fpm_ini_expose_php: On
+php5_fpm_ini_memory_limit: 64M
+php5_fpm_ini_max_execution_time: 30
+php5_fpm_ini_max_input_time: 60
+php5_fpm_ini_max_input_vars: 100
+php5_fpm_ini_realpath_cache_size: 32K
+php5_fpm_ini_realpath_cache_ttl: 120
+php5_fpm_ini_upload_max_filesize: 64M
+php5_fpm_ini_post_max_size: 32M
+php5_fpm_ini_date_timezone: "Europe/Berlin"
+php5_fpm_ini_sendmail_path: "/usr/sbin/sendmail -t -i"
+php5_fpm_ini_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+php5_fpm_ini_display_errors: "Off"
+php5_fpm_ini_display_startup_errors: "Off"
 
 # APCu
 php5_apcu_ini:

@@ -8,7 +8,7 @@
 
 - name: Set fpm php.ini
   template:
-    src: php.ini
+    src: php_fpm.ini
     dest: /etc/php5/fpm/php.ini
     owner: root
     group: root
@@ -17,7 +17,7 @@
 
 - name: Set cli php.ini
   template:
-    src: php.ini
+    src: php_cli.ini
     dest: /etc/php5/cli/php.ini
     owner: root
     group: root
