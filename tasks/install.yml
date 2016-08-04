@@ -4,6 +4,22 @@
   set_fact:
     php5_fpm_packages: '{{ php5_fpm_default_packages + php5_fpm_group_packages + php5_fpm_host_packages }}'
 
+- name: Pin php5
+  copy:
+    dest: /etc/apt/preferences.d/php
+    content: |
+      Package: {{ php5_fpm_pin_version }}
+      Pin: release a=oldstable
+      Pin-Priority: 700
+
+      Package: *
+      Pin: release a=stable
+      Pin-Priority: 600
+    owner: root
+    group: root
+    mode: '0644'
+  when: php5_fpm_pin_version is defined
+
 - name: Install php5 packages
   notify: restart php5-fpm
   apt:

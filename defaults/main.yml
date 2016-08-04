@@ -1,4 +1,6 @@
 ---
+php5_fpm_pin_version: 'php5*'
+
 # Used for host variables
 php5_fpm_host_packages: []
 
