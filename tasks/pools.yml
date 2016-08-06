@@ -79,7 +79,7 @@
     state: directory
     owner: '{{ item.0.user }}'
     group: '{{ item.0.group | default(item.0.user) }}'
-    mode: 2771
+    mode: 02771
     follow: yes
   when: item.1 is defined and item.1 != ''
   with_subelements:
