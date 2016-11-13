@@ -1,4 +1,4 @@
-{{ item[0][item.1] }}/*.log {
+{{ item[0][item.1] }}/php_errors.log {
 	daily
 	rotate 7
 	compress

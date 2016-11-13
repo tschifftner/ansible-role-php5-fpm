@@ -4,9 +4,14 @@
   set_fact:
     php5_fpm_packages: '{{ php5_fpm_default_packages + php5_fpm_group_packages + php5_fpm_host_packages }}'
 
+- name: Remove old pins
+  file:
+    path: /etc/apt/preferences.d/php
+    state: absent
+
 - name: Pin php5
   copy:
-    dest: /etc/apt/preferences.d/php
+    dest: /etc/apt/preferences.d/php5
     content: |
       Package: {{ php5_fpm_pin_version }}
       Pin: release a=oldstable

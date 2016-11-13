@@ -29,14 +29,13 @@ php5_fpm_include: ['/etc/php5/fpm/pool.d/*.conf']
 php5_fpm_pool_dir: '/etc/php5/fpm/pool.d/'
 php5_fpm_remove_default_pool: true
 
-php5_fpm_pools: []
-#  - name: 'r24_live'
-#    user: 'www-data'
-#    group: 'www-data'
-#    prefix: '/var/www/test/test.de/html'
-#    socket_file: '/run/r24.socket'
-#    tmp_path: '/var/www/'
-#    sessions_path: '/var/www/sessions/r24_live'
+php5_fpm_pools:
+  # define default pool in case php5_fpm_pools is not set
+  - name: default
+    user: 'www-data'
+    group: 'www-data'
+    prefix: '/var/www/html'
+    project_paths: []
 
 php5_fpm_cronjobs: []
 
@@ -117,6 +116,7 @@ php5_opcache_ini:
   validate_timestamps: "1"
   revalidate_freq: "2"
   max_file_size: "0"
+  save_comments: "1"
 
 php5_fpm_install_ioncube: false
 php5_fpm_ioncube_download_url: 'http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64_5.1.2.tar.gz'
