@@ -56,7 +56,10 @@ script:
     && (echo 'PHP socket exists' && exit 0)
     || (echo 'PHP socket does not exist' && exit 1)
 
-  - php -r 'phpinfo();' | grep ionCube
+  - >
+    php -v | grep ionCube
+    && (echo 'ionCube installed' && exit 0)
+    || (echo 'ionCube is not installed' && exit 1)
 
 after_failure:
   # run playbook again to see idempotence failures
