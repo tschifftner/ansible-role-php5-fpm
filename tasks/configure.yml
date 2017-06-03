@@ -24,6 +24,12 @@
     mode: 0644
   notify: restart php5-fpm
 
+- name: Enable modules
+  notify: restart php5-fpm
+  command: 'php5enmod {{ item }}'
+  with_items: '{{ php5_fpm_default_enabled_packages  }}'
+  changed_when: false
+
 - name: Configure php5-fpm.conf
   notify: restart php5-fpm
   template:

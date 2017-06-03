@@ -16,3 +16,27 @@ php5_fpm_default_packages:
   - php5-xsl
   - fcgiwrap
   - php5-mysqlnd
+
+php5_fpm_default_enabled_packages:
+  - apcu
+  - gd
+  - imagick
+  - imap
+  - intl
+  - json
+  - mcrypt
+  - memcache
+  - mysql
+  - mysqli
+  - mysqlnd
+  - opcache
+  - pdo
+  - pdo_mysql
+  - pdo_sqlite
+  - pspell
+  - readline
+  - redis
+  - sqlite3
+  - tidy
+  - xmlrpc
+  - xsl
