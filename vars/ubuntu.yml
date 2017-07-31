@@ -16,6 +16,7 @@ php5_fpm_default_packages:
   - php5-xsl
   - fcgiwrap
   - php5-mysqlnd
+  - libxml2-utils
 
 php5_fpm_default_enabled_packages:
   - apcu
